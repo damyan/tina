@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+libtmux >= 0.40.1, < 1
+pytest >= 7, < 9
+pyyaml >= 6, < 7

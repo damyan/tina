@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+
+# autoconf/automake
+autom4te.cache/
+.deps/
+
+config.log
+config.status
+configure~
+Makefile
+
+# C
+*.o
+
+tina
+
+# Python tests, documentation
+site/
+.tox/
+
+tests/python/**/__pycache__/
+
+# Rust
+rust/target/

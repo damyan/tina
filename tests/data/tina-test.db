@@ -1,0 +1,24 @@
+Item-ID: <57866329.6b8b4567@straylight>
+Description: First item, a simple one.
+
+Item-ID: <57866333.327b23c6@straylight>
+Description: Second item - this is a ``category!``
+
+Item-ID: <57866340.643c9869@straylight>
+Description: ...and it has a sub-item of sorts, doesn't it now?
+Category: <57866333.327b23c6@straylight>
+
+Item-ID: <57866349.66334873@straylight>
+Description: # And some of them `even look" funny
+Category: <57866333.327b23c6@straylight>
+
+Item-ID: <5786635d.74b0dc51@straylight>
+Description: Let's have [one more](while we're) at it.
+
+Item-ID: <57866365.19495cff@straylight>
+Description: And another sub-item, I guess.
+Category: <5786635d.74b0dc51@straylight>
+
+Item-ID: <57877504.2ae8944a@straylight>
+Description: Whee, a third-level item!
+Category: <57866340.643c9869@straylight>

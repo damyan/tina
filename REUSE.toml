@@ -1,0 +1,33 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+version = 1
+SPDX-PackageName = "tina"
+SPDX-PackageSupplier = "Peter Pentchev <roam@ringlet.net>"
+SPDX-PackageDownloadLocation = "https://gitlab.com/tina-mgr/tina-mgr"
+
+[[annotations]]
+path = [
+  "AUTHORS",
+  "INSTALL",
+  "Makefile.in",
+  "aclocal.m4",
+  "compile",
+  "configure",
+  "depcomp",
+  "install-sh",
+  "missing",
+  "rust/Cargo.lock",
+  "tests/data/tina-test.db",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "Peter Pentchev <roam@ringlet.net>"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = [
+  "mkinstalldirs",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2001, 2002  Matt Kraai"
+SPDX-License-Identifier = "CC0-1.0"

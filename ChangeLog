@@ -1,0 +1,7 @@
+SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+SPDX-License-Identifier: GPL-2.0-or-later
+
+For a detailed change log of tina, please see its Git repository at
+https://gitlab.com/tina-mgr/tina-mgr
+
+  git clone https://gitlab.com/tina-mgr/tina-mgr.git

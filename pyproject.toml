@@ -1,0 +1,105 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+[build-system]
+requires = [
+  "hatchling >= 1.26, < 2",
+  "hatch-requirements-txt >= 0.3, < 0.5",
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "tina-mgr"
+description = "Handle the database files of the Tina personal information manager"
+readme = "README.md"
+license = "GPL-2.0-or-later"
+license-files = ["LICENSES/GPL-2.0-or-later.txt"]
+requires-python = ">= 3.11"
+dynamic = ["dependencies", "version"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "Operating System :: POSIX",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: File Formats",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Testing :: Unit",
+  "Topic :: Utilities",
+  "Typing :: Typed",
+]
+
+[[project.authors]]
+name = "Peter Pentchev"
+email = "roam@ringlet.net"
+
+[project.scripts]
+"tina-convert" = "tina_mgr.convert.__main__:main"
+
+[project.urls]
+Homepage = "https://devel.ringlet.net/misc/tina/"
+Changes = "https://devel.ringlet.net/misc/tina/changes/"
+"Issue Tracker" = "https://gitlab.com/tina-mgr/tina-mgr/-/issues"
+"Source Code" = "https://gitlab.com/tina-mgr/tina-mgr"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/.gitignore",
+  "/.readthedocs.yaml",
+  "/LICENSES/GPL-2.0-or-later.txt",
+  "/README.md",
+  "/REUSE.toml",
+  "/docs",
+  "/mkdocs.yml",
+  "/pyproject.toml",
+  "/python",
+  "/ruff-base.toml",
+  "/tests",
+  "/tox.ini",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["python/src/tina_mgr"]
+
+[tool.hatch.metadata.hooks.requirements_txt]
+files = ["python/requirements/install.txt"]
+
+[tool.hatch.version]
+path = "python/src/tina_mgr/defs.py"
+pattern = '(?x) ^ VERSION \s* (?: : \s* Final \s* )? = \s* " (?P<version> [^\s"]+ ) " \s* $'
+
+[tool.mypy]
+strict = true
+
+[tool.publync.format.version]
+major = 0
+minor = 1
+
+[tool.publync.build.tox]
+
+[tool.publync.sync.rsync]
+remote = "marla.ludost.net:vhosts/devel.ringlet.net/public_html/misc/tina"
+
+[tool.ruff]
+extend = "ruff-base.toml"
+output-format = "concise"
+preview = true
+
+[tool.ruff.lint]
+select = ["ALL"]
+
+[tool.test-stages]
+stages = [
+  "(@check or @docs) and @quick and not @manual",
+  "(@check or @docs) and not @manual",
+  "@tests and not @manual",
+]

@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - toc.integrate
+    - toc.follow
+    - content.code.copy
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+site_name: tina
+repo_url: https://gitlab.com/tina-mgr/tina-mgr
+repo_name: tina-mgr
+site_author: ppentchev
+site_url: https://devel.ringlet.net/misc/tina/
+site_dir: site/docs
+nav:
+  - 'index.md'
+  - 'Download': 'download.md'
+  - 'Changelog': 'changes.md'
+  - 'Python API reference':
+    - 'Contents': 'api/python/index.md'
+    - 'Common definitions': 'api/python/common.md'
+    - 'The in-memory representation of the Tina database': 'api/python/db.md'
+    - 'Parsing the native Tina database': 'api/python/parse.md'
+    - 'Conversion: format handlers': 'api/python/convert-formats.md'
+    - 'Conversion: errors': 'api/python/convert-errors.md'
+markdown_extensions:
+  - toc:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite:
+  - pymdownx.superfences:
+plugins:
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [python/src]
+          options:
+            heading_level: 2
+            show_root_heading: true
+  - search
+watch:
+  - 'python/src/tina_mgr'

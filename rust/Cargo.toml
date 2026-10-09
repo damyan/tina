@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+[package]
+name = "tina-mgr"
+version = "0.1.14"
+edition = "2021"
+rust-version = "1.58"
+description = "Helper functions for the tina personal information manager"
+authors = ["Peter Pentchev <roam@ringlet.net>"]
+license = "BSD-2-Clause"
+repository = "https://gitlab.com/tina-mgr/tina-mgr.git"
+readme = "../README.md"
+keywords = ["tina"]
+categories = ["command-line-utilities", "parser-implementations"]
+
+[dependencies]
+anyhow = "1.0.69"
+clap = "4.0.32"
+clap_derive = "4.0.21"
+itertools = ">= 0.10.3, < 0.14"
+nom = "7.1.1"
+once_cell = ">= 1.17, < 1.21"
+serde = "1.0.152"
+serde_derive = "1.0.152"
+serde_json = "1.0.87"
+serde_yaml = ">= 0.8.26, < 0.10"
+thiserror = ">= 1.0.38, < 3"
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
