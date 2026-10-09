@@ -14,6 +14,7 @@
 #include <getopt.h>
 #include <locale.h>
 #include <pwd.h>
+#include <signal.h>
 #include <regex.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -675,6 +676,14 @@ cmd_help (struct view **v __unused, struct item **clipboard __unused)
     }
 }
 
+static volatile sig_atomic_t got_sigint = 0;
+
+static void
+sigint_handler (int signo __unused)
+{
+  got_sigint = 1;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -743,6 +752,17 @@ main (int argc, char **argv)
       init_pair (color_status, COLOR_GREEN, COLOR_BLUE);
     }
 
+  /* Catch SIGINT (Ctrl+C) so the main loop can exit gracefully through the
+     normal cleanup path (endwin + unlock the database) instead of dying
+     mid-loop and leaving a stale .lock file behind. */
+  {
+    struct sigaction sa;
+    memset (&sa, 0, sizeof (sa));
+    sa.sa_handler = sigint_handler;
+    sigemptyset (&sa.sa_mask);
+    sigaction (SIGINT, &sa, NULL);
+  }
+
   db = database_new_with_path (optind != argc ? argv[optind] : "~/.tina");
   s = selection_new_with_database (db);
   v = view_new_with_selection (s);
@@ -750,7 +770,7 @@ main (int argc, char **argv)
 
   clipboard = NULL;
 
-  while (get_wch (&input) != ERR && input != 'q')
+  while (!got_sigint && get_wch (&input) != ERR && input != 'q')
     {
       CLEARLINE (LINES - 1);
 
@@ -795,6 +815,9 @@ main (int argc, char **argv)
 
       view_show (v);
     }
+
+  if (got_sigint)
+    addstr ("Interrupted by Ctrl+C.");
 
   database_delete (db);
 
