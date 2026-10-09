@@ -19,7 +19,8 @@ AC_MSG_RESULT([$ac_accepts_Wall])
 
 AC_SYS_LARGEFILE
 
-AC_CHECK_LIB(curses, initscr)
+AC_SEARCH_LIBS([initscr], [ncursesw ncurses curses], [],
+  [AC_MSG_ERROR([No curses library found])])
 
 AC_MSG_CHECKING([whether the C compiler accepts -Wstrict-prototypes])
 ac_save_CFLAGS="$CFLAGS"

@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 /*
  * tina - a personal information manager
  * SPDX-FileCopyrightText: 2001  Matt Kraai
@@ -8,6 +9,7 @@
 #include <curses.h>
 #include <stdlib.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "curslib.h"
 #include "memory.h"
@@ -32,6 +34,43 @@ view_delete (struct view *v)
   free (v);
 }
 
+static void
+addstr_cols (const char *s, int max_cols)
+{
+  mbstate_t st;
+  int cols = 0;
+  size_t i = 0;
+  size_t slen = strlen (s);
+
+  memset (&st, 0, sizeof (st));
+  while (i < slen && cols < max_cols)
+    {
+      wchar_t wc;
+      size_t n = mbrtowc (&wc, s + i, slen - i, &st);
+      int w;
+
+      if (n == (size_t)-1 || n == (size_t)-2)
+        {
+          n = 1;
+          w = 1;
+        }
+      else if (n == 0)
+        break;
+      else
+        {
+          w = wcwidth (wc);
+          if (w < 0)
+            w = 1;
+        }
+
+      if (cols + w > max_cols)
+        break;
+      cols += w;
+      i += n;
+    }
+  addnstr (s, (int)i);
+}
+
 /* Display the help line.  */
 static void
 show_help_line (void)
@@ -54,7 +93,8 @@ show_item (struct view *v, int line, int item)
 	standout ();
     }
 
-  mvaddnstr (line, 0, v->s->items[item]->description, COLS);
+  move (line, 0);
+  addstr_cols (v->s->items[item]->description, COLS);
 
   if (item == v->selected)
     {
@@ -89,7 +129,7 @@ show_mode_line (struct view *v)
 	    addstr ("Category:");
 	    getyx (stdscr, y, x);
 	    if (y != -1) {
-		    addnstr (v->s->db->items[i]->description, COLS - x - 20);
+		    addstr_cols (v->s->db->items[i]->description, COLS - x - 20);
 		    addch (' ');
 	    }
 	    break;

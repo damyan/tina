@@ -6,11 +6,13 @@
  */
 
 #define _GNU_SOURCE
+#define _XOPEN_SOURCE_EXTENDED 1
 
 #include <ctype.h>
 #include <curses.h>
 #include <errno.h>
 #include <getopt.h>
+#include <locale.h>
 #include <pwd.h>
 #include <regex.h>
 #include <stdio.h>
@@ -639,11 +641,11 @@ cmd_help (struct view **v __unused, struct item **clipboard __unused)
 
   for (first = 0; first < NUM_ELEMENTS (bindings);)
     {
-      int input;
+      wint_t input;
 
       show_help (first);
 
-      input = getch ();
+      get_wch (&input);
 
       CLEARLINE (LINES - 1);
 
@@ -688,7 +690,8 @@ main (int argc, char **argv)
   struct item *clipboard;
 
   size_t i;
-  int input, opt;
+  wint_t input;
+  int opt;
 
   while ((opt = getopt_long (argc, argv, "", options, NULL)) != -1)
     switch (opt)
@@ -724,6 +727,8 @@ main (int argc, char **argv)
       return 1;
     }
 
+  setlocale (LC_ALL, "");
+
   initscr ();
   cbreak ();
   noecho ();
@@ -745,12 +750,12 @@ main (int argc, char **argv)
 
   clipboard = NULL;
 
-  while ((input = getch ()) != 'q')
+  while (get_wch (&input) != ERR && input != 'q')
     {
       CLEARLINE (LINES - 1);
 
       for (i = 0; i < NUM_ELEMENTS (bindings); i++)
-	if (bindings[i].key == input)
+	if (bindings[i].key == (int)input)
 	  {
 	    size_t j;
 
