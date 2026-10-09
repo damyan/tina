@@ -201,63 +201,16 @@ inquire (const char *prompt, const char *value)
     {
       if (input_type == OK && wch == '\n')
         break;
-      if (input_type == OK && wch == CONTROL ('G'))
+      if (input_type == OK && (wch == CONTROL ('G') || wch == CONTROL ('C')))
         break;
 
+      /* With keypad(TRUE) set in main(), ncurses disambiguates ESC for us:
+         a lone ESC is delivered as 0x1B once ESCDELAY expires, while a
+         function/arrow-key escape sequence is delivered as a KEY_* code.
+         So a plain 0x1B here always means the Escape key alone: cancel. */
       if (input_type == OK && wch == 0x1B)
-        {
-          wint_t esc_ch;
-          int esc_type = get_wch (&esc_ch);
+        break;
 
-          if (esc_type == OK && esc_ch == 'b')
-            {
-              while (pos > 0 && !iswalnum (mb_decode_at (buf + mb_prev_start (buf, pos),
-                       pos - mb_prev_start (buf, pos))))
-                pos = mb_prev_start (buf, pos);
-              while (pos > 0 && iswalnum (mb_decode_at (buf + mb_prev_start (buf, pos),
-                       pos - mb_prev_start (buf, pos))))
-                pos = mb_prev_start (buf, pos);
-            }
-          else if (esc_type == OK && esc_ch == 'f')
-            {
-              while (pos < len && !iswalnum (mb_decode_at (buf + pos, len - pos)))
-                pos += mb_char_len (buf + pos, len - pos);
-              while (pos < len && iswalnum (mb_decode_at (buf + pos, len - pos)))
-                pos += mb_char_len (buf + pos, len - pos);
-            }
-          else if (esc_type == OK && esc_ch == 'd')
-            {
-              tmppos = pos;
-              while (tmppos < len && !iswalnum (mb_decode_at (buf + tmppos, len - tmppos)))
-                tmppos += mb_char_len (buf + tmppos, len - tmppos);
-              while (tmppos < len && iswalnum (mb_decode_at (buf + tmppos, len - tmppos)))
-                tmppos += mb_char_len (buf + tmppos, len - tmppos);
-
-              free (killed);
-              killed = xstrndup (buf + pos, tmppos - pos);
-
-              memmove (buf + pos, buf + tmppos, len - tmppos);
-              len -= tmppos - pos;
-            }
-          else if ((esc_type == KEY_CODE_YES && esc_ch == KEY_BACKSPACE)
-                   || (esc_type == OK && esc_ch == 0x7F))
-            {
-              tmppos = pos;
-              while (tmppos > 0 && !iswalnum (mb_decode_at (buf + mb_prev_start (buf, tmppos),
-                       tmppos - mb_prev_start (buf, tmppos))))
-                tmppos = mb_prev_start (buf, tmppos);
-              while (tmppos > 0 && iswalnum (mb_decode_at (buf + mb_prev_start (buf, tmppos),
-                       tmppos - mb_prev_start (buf, tmppos))))
-                tmppos = mb_prev_start (buf, tmppos);
-
-              free (killed);
-              killed = xstrndup (buf + tmppos, pos - tmppos);
-
-              memmove (buf + tmppos, buf + pos, len - pos);
-              len -= pos - tmppos;
-              pos = tmppos;
-            }
-        }
       else if ((input_type == KEY_CODE_YES && wch == KEY_BACKSPACE)
                || (input_type == OK && wch == 0x7F)
                || (input_type == OK && wch == '\b'))

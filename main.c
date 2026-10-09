@@ -742,6 +742,10 @@ main (int argc, char **argv)
   cbreak ();
   noecho ();
   keypad (stdscr, TRUE);
+  /* Lower the escape-sequence timeout so a lone ESC inside inquire() is
+     delivered (as cancel) quickly, while multi-byte key sequences (arrow
+     keys etc.) are still recognised.  Default is 1000 ms. */
+  set_escdelay (100);
   curs_set (0);
 
   if (has_colors ())
