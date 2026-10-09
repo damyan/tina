@@ -3,7 +3,7 @@
 
 [package]
 name = "tina-mgr"
-version = "0.1.14"
+version = "0.1.15"
 edition = "2021"
 rust-version = "1.58"
 description = "Helper functions for the tina personal information manager"

@@ -4,7 +4,7 @@ dnl SPDX-FileCopyrightText: 2002 - 2007  Matt Kraai
 dnl SPDX-FileCopyrightText: Peter Pentchev <roam@ringlet.net>
 dnl SPDX-License-Identifier: GPL-2.0-or-later
 
-AC_INIT(tina, 0.1.14)
+AC_INIT(tina, 0.1.15)
 AM_INIT_AUTOMAKE
 
 AC_PROG_CC

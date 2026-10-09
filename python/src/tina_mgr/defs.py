@@ -12,7 +12,7 @@ if typing.TYPE_CHECKING:
     from typing import Final
 
 
-VERSION: Final = "0.1.14"
+VERSION: Final = "0.1.15"
 """The version of tina-mgr, semver-like."""
 
 
